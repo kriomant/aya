@@ -86,7 +86,7 @@ pub use queue::Queue;
 pub use sock::{SockHash, SockMap};
 pub use stack::Stack;
 pub use stack_trace::StackTraceMap;
-pub use xdp::XskMap;
+pub use xdp::{CpuMap, DevMap, DevMapHash, XskMap};
 
 #[derive(Error, Debug)]
 /// Errors occuring from working with Maps
@@ -264,6 +264,14 @@ pub enum Map {
     StackTraceMap(MapData),
     /// A [`Queue`] map
     Queue(MapData),
+    /// A [`CpuMap`] map
+    CpuMap(MapData),
+    /// A [`DevMap`] map
+    DevMap(MapData),
+    /// A [`DevMapHash`] map
+    DevMapHash(MapData),
+    /// A [`XskMap`] map
+    XskMap(MapData),
 }
 
 impl Map {
@@ -285,6 +293,10 @@ impl Map {
             Map::Stack(map) => map.obj.map_type(),
             Map::StackTraceMap(map) => map.obj.map_type(),
             Map::Queue(map) => map.obj.map_type(),
+            Map::CpuMap(map) => map.obj.map_type(),
+            Map::DevMap(map) => map.obj.map_type(),
+            Map::DevMapHash(map) => map.obj.map_type(),
+            Map::XskMap(map) => map.obj.map_type(),
         }
     }
 }
@@ -339,6 +351,10 @@ impl_try_from_map!(
     SockMap from Map::SockMap,
     PerfEventArray from Map::PerfEventArray,
     StackTraceMap from Map::StackTraceMap,
+    CpuMap from Map::CpuMap,
+    DevMap from Map::DevMap,
+    DevMapHash from Map::DevMapHash,
+    XskMap from Map::XskMap,
 );
 
 #[cfg(feature = "async")]
