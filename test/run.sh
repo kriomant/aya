@@ -182,7 +182,7 @@ EOF
     echo "VM launched"
     exec_vm uname -a
     echo "Installing dependencies"
-    exec_vm sudo dnf install -qy bpftool llvm llvm-devel clang clang-devel zlib-devel
+    exec_vm sudo dnf install -qy bpftool llvm llvm-devel clang clang-devel zlib-devel elfutils-libelf-devel
     exec_vm 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- \
         -y --profile minimal --default-toolchain nightly --component rust-src --component clippy'
     exec_vm 'echo source ~/.cargo/env >> ~/.bashrc'
