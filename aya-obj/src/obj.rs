@@ -16,6 +16,7 @@ use object::{
 
 use crate::{
     maps::{BtfMap, LegacyMap, Map, MapKind, MINIMUM_MAP_SIZE},
+    programs::XdpAttachType,
     relocation::*,
     thiserror::{self, Error},
     util::HashMap,
@@ -158,8 +159,6 @@ pub struct Function {
 /// - `fmod_ret+`, `fmod_ret.s+`
 /// - `fentry.s+`, `fexit.s+`
 /// - `iter+`, `iter.s+`
-/// - `xdp.frags/cpumap`, `xdp/cpumap`
-/// - `xdp.frags/devmap`, `xdp/devmap`
 #[derive(Debug, Clone)]
 #[allow(missing_docs)]
 pub enum ProgramSection {
@@ -184,6 +183,7 @@ pub enum ProgramSection {
     Xdp {
         name: String,
         frags_supported: bool,
+        attach_type: XdpAttachType,
     },
     SkMsg {
         name: String,
@@ -316,10 +316,32 @@ impl FromStr for ProgramSection {
             "xdp" => Xdp {
                 name,
                 frags_supported: false,
+                attach_type: XdpAttachType::Interface,
             },
             "xdp.frags" => Xdp {
                 name,
                 frags_supported: true,
+                attach_type: XdpAttachType::Interface,
+            },
+            "xdp/cpumap" => Xdp {
+                name,
+                frags_supported: false,
+                attach_type: XdpAttachType::CpuMap,
+            },
+            "xdp/devmap" => Xdp {
+                name,
+                frags_supported: false,
+                attach_type: XdpAttachType::DevMap,
+            },
+            "xdp.frags/cpumap" => Xdp {
+                name,
+                frags_supported: true,
+                attach_type: XdpAttachType::CpuMap,
+            },
+            "xdp.frags/devmap" => Xdp {
+                name,
+                frags_supported: true,
+                attach_type: XdpAttachType::DevMap,
             },
             "tp_btf" => BtfTracePoint { name },
             _ if kind.starts_with("tracepoint") || kind.starts_with("tp") => {
