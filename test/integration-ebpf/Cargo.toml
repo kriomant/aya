@@ -26,3 +26,7 @@ path = "src/test.rs"
 [[bin]]
 name = "redirect"
 path = "src/redirect.rs"
+
+[[bin]]
+name = "xdp_sec"
+path = "src/xdp_sec.rs"
