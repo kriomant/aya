@@ -1,8 +1,8 @@
 //! An array of network devices.
 
-use std::os::fd::AsRawFd;
+//use std::os::fd::AsRawFd;
 
-use aya_obj::generated::{bpf_devmap_val, bpf_devmap_val__bindgen_ty_1};
+use aya_obj::generated::{bpf_devmap_val, /*bpf_devmap_val__bindgen_ty_1*/};
 
 use crate::{
     maps::{check_bounds, check_kv_size, IterableMap, MapData, MapError},
@@ -77,7 +77,7 @@ impl<T: AsRef<MapData>> DevMap<T> {
         // https://elixir.bootlin.com/linux/v6.2/source/include/uapi/linux/bpf.h#L6136
         Ok(DevMapValue {
             ifindex: value.ifindex,
-            prog_id: unsafe { value.bpf_prog.id },
+            prog_id: 0, //unsafe { value.bpf_prog.id },
         })
     }
 
@@ -109,7 +109,7 @@ impl<T: AsMut<MapData>> DevMap<T> {
         &mut self,
         index: u32,
         ifindex: u32,
-        program: Option<ProgramFd>,
+        _program: Option<ProgramFd>,
         flags: u64,
     ) -> Result<(), MapError> {
         let data = self.inner.as_mut();
@@ -118,9 +118,9 @@ impl<T: AsMut<MapData>> DevMap<T> {
 
         let value = bpf_devmap_val {
             ifindex,
-            bpf_prog: bpf_devmap_val__bindgen_ty_1 {
+            /*bpf_prog: bpf_devmap_val__bindgen_ty_1 {
                 fd: program.map(|prog| prog.as_raw_fd()).unwrap_or_default(),
-            },
+            },*/
         };
         bpf_map_update_elem(fd, Some(&index), &value, flags).map_err(|(_, io_error)| {
             MapError::SyscallError {

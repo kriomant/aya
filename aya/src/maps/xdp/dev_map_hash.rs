@@ -1,8 +1,8 @@
 //! An hashmap of network devices.
 
-use std::os::fd::AsRawFd;
+//use std::os::fd::AsRawFd;
 
-use aya_obj::generated::{bpf_devmap_val, bpf_devmap_val__bindgen_ty_1};
+use aya_obj::generated::{bpf_devmap_val, /*bpf_devmap_val__bindgen_ty_1*/};
 
 use crate::{
     maps::{check_kv_size, hash_map, IterableMap, MapData, MapError, MapIter, MapKeys},
@@ -67,7 +67,7 @@ impl<T: AsRef<MapData>> DevMapHash<T> {
         // https://elixir.bootlin.com/linux/v6.2/source/include/uapi/linux/bpf.h#L6136
         Ok(DevMapValue {
             ifindex: value.ifindex,
-            prog_id: unsafe { value.bpf_prog.id },
+            prog_id: 0, //unsafe { value.bpf_prog.id },
         })
     }
 
@@ -103,14 +103,14 @@ impl<T: AsMut<MapData>> DevMapHash<T> {
         &mut self,
         key: u32,
         ifindex: u32,
-        program: Option<ProgramFd>,
+        _program: Option<ProgramFd>,
         flags: u64,
     ) -> Result<(), MapError> {
         let value = bpf_devmap_val {
             ifindex,
-            bpf_prog: bpf_devmap_val__bindgen_ty_1 {
+            /*bpf_prog: bpf_devmap_val__bindgen_ty_1 {
                 fd: program.map(|prog| prog.as_raw_fd()).unwrap_or_default(),
-            },
+            },*/
         };
         hash_map::insert(self.inner.as_mut(), &key, &value, flags)
     }

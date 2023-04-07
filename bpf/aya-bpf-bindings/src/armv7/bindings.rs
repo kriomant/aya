@@ -1439,7 +1439,7 @@ pub struct xdp_md {
 #[derive(Copy, Clone)]
 pub struct bpf_devmap_val {
     pub ifindex: __u32,
-    pub bpf_prog: bpf_devmap_val__bindgen_ty_1,
+    //pub bpf_prog: bpf_devmap_val__bindgen_ty_1,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]

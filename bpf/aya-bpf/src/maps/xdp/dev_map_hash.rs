@@ -116,7 +116,7 @@ impl DevMapHash {
                 ifindex: p.as_ref().ifindex,
                 // SAFETY: map writes use fd, map reads use id.
                 // https://elixir.bootlin.com/linux/v6.2/source/include/uapi/linux/bpf.h#L6136
-                prog_id: p.as_ref().bpf_prog.id,
+                prog_id: 0, //p.as_ref().bpf_prog.id,
             })
         }
     }
